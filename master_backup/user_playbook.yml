@@ -1,0 +1,36 @@
+---
+
+
+- name: create users
+  hosts: webservers
+  become: yes
+
+  vars:
+    ansible_become_pass: "vagrant"
+
+  tasks:
+
+  - name: create devops group
+    ansible.builtin.group:
+      name: devops
+      state: present
+
+  - name: create users in devops group
+    ansible.builtin.user:
+      name:  "{{ item }}"
+      group: devops
+    loop:
+      - firdi
+      - fassica
+      - beza
+      - daniel
+      - steven
+  - name: create antra-employees file and assign devops group with 770 permission
+    ansible.builtin.file:
+      path: /tmp/antra-employees
+      state: touch
+      mode: u=rwx,g=rwx
+      group: devops
+
+
+...

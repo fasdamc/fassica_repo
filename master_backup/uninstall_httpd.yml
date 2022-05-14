@@ -1,0 +1,27 @@
+---
+
+- name: playbook to uninstall httpd
+  hosts: webservers
+  become: yes
+  
+  vars: 
+    ansible_become_pass: "vagrant"
+
+  tasks:
+
+  - name: stop httpd service
+    ansible.builtin.service:
+      name: httpd
+      state: stopped
+
+  - name: remove the index file
+    ansible.builtin.file:
+      path: /var/www/html/index.html
+      state: absent
+
+  - name: uninstall httpd
+    ansible.builtin.yum:
+      name: httpd
+      state: absent
+
+...
